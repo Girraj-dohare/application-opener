@@ -24,11 +24,16 @@ def recognize_and_execute_voice():
             command = recognizer.recognize_google(audio).lower()
             print(f"Recognized voice command: {command}")
 
-            if command in app_mapping:
-                app_path = app_mapping[command]
-                subprocess.Popen(app_path)
-                feedback_label.config(text=f"Opening {app_path}", fg="green")
-                engine.say(f"Opening {app_mapping[command]}")
+            matched_app = None
+            for app_name, app_path in app_mapping.items():
+                if app_name in command:
+                    matched_app = app_name
+                    subprocess.Popen(app_path)
+                    break
+
+            if matched_app:
+                feedback_label.config(text=f"Opening {matched_app.split(' ', 1)[1]}", fg="green")
+                engine.say(f"Opening {matched_app.split(' ', 1)[1]}")
                 engine.runAndWait()
             else:
                 feedback_label.config(text="Voice command not recognized.", fg="red")
@@ -45,8 +50,8 @@ def execute_text_command():
     if text_command in app_mapping:
         app_path = app_mapping[text_command]
         subprocess.Popen(app_path)
-        feedback_label.config(text=f"Opening {app_path}", fg="green")
-        engine.say(f"Opening {app_mapping[text_command]}")
+        feedback_label.config(text=f"Opening {text_command.split(' ', 1)[1]}", fg="green")
+        engine.say(f"Opening {text_command.split(' ', 1)[1]}")
         engine.runAndWait()
     else:
         feedback_label.config(text="Text command not recognized.", fg="red")
@@ -58,7 +63,7 @@ window = tk.Tk()
 window.title("Creative Problem Solving - Assignment by GIRRAJ DOHARE 0901IT201023")
 window.geometry("800x400") 
 
-bg_image = PhotoImage(file=r"C:\Users\DELL\Downloads\Creative-Problem-Solving-assignment-master\Creative-Problem-Solving-assignment-master\Problem.png") 
+bg_image = PhotoImage(file=r"G:\Application opener\Problem.png") 
 bg_label = tk.Label(window, image=bg_image)
 bg_label.place(relwidth=1, relheight=1)
 
